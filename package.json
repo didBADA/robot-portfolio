@@ -1,0 +1,9 @@
+{
+  "name": "robot-portfolio",
+  "private": true,
+  "type": "module",
+  "description": "Robotics engineer portfolio with an AI lab assistant",
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest"
+  }
+}
