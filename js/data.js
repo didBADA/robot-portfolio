@@ -25,7 +25,7 @@ window.PORTFOLIO = {
     using: [
       { group: "프로그래밍", items: ["Python", "Arduino (C/C++)"] },
       { group: "비전", items: ["OpenCV", "MediaPipe Hands"] },
-      { group: "하드웨어", items: ["Arduino Nano", "ESP32", "연속회전 서보", "시리얼 통신"] },
+      { group: "하드웨어", items: ["Arduino Uno", "ESP32", "연속회전 서보", "시리얼 통신"] },
       { group: "설계 · 제작", items: ["FreeCAD", "3D 프린팅"] },
       /* 예시
       { group: "프로그래밍", items: ["Python", "C++"] },
@@ -56,7 +56,7 @@ window.PORTFOLIO = {
       summary:
         "웹캠으로 내 손가락이 접혔는지 펴졌는지 판정하고, 연속회전 서보 5개가 줄(텐던)을 감고 풀어 3D 프린팅 로봇손의 손가락을 하나씩 따라 움직입니다.",
       category: "비전 · 임베디드",
-      tags: ["Python", "MediaPipe", "OpenCV", "Arduino Nano", "연속회전 서보", "FreeCAD", "3D 프린팅"],
+      tags: ["Python", "MediaPipe", "OpenCV", "Arduino Uno", "연속회전 서보", "FreeCAD", "3D 프린팅"],
       status: "prototype",
       evidence: "real",
       period: "2023.12 – 2026.04",
@@ -75,7 +75,7 @@ window.PORTFOLIO = {
       problem:
         "손가락 관절마다 모터를 달면 손이 커지고 무거워집니다. 그래서 손가락 하나를 줄 하나로 당겨 접는 텐던 구조를 택했습니다. 이때 각도 센서가 없는 연속회전 서보로 '줄을 얼마나 감았는지'를 정해야 하고, 카메라 영상에서 손가락이 접혔는지 안정적으로 판정해야 합니다.",
       hardware: [
-        "Arduino Nano — 메인 제어 (USB 시리얼 9600bps)",
+        "Arduino Uno — 메인 제어 (USB 시리얼 9600bps)",
         "연속회전 서보모터 × 5 — 손가락마다 하나씩, 줄을 감고 풀어 구동",
         "손가락별 핀: 엄지 D6 · 검지 D10 · 중지 D9 · 약지 D7 · 소지 D8",
         "웹캠 — 사람 손 영상 입력",
@@ -97,7 +97,7 @@ window.PORTFOLIO = {
         "ESP32 버전: 손가락 관절 각도를 서보 값으로 연속 변환하고 스무딩해서 보내는 방식 시도",
         "키보드 입력으로 손가락 하나를 감기/풀기 하는 시리얼 테스트",
         "연속 각도 대신 접힘/펴짐 두 상태 + 한 글자 명령 방식으로 단순화",
-        "Arduino Nano 최종 버전: 손가락별 서보 세기·시간과 판정 기준값을 따로 보정",
+        "Arduino Uno 최종 버전: 손가락별 서보 세기·시간과 판정 기준값을 따로 보정",
       ],
       lessons: [
         "PC가 보내는 형식과 보드가 받는 형식이 달라 손이 움직이지 않던 문제 → 한 글자 명령으로 통일 (개발 기록 참고)",
@@ -113,8 +113,8 @@ window.PORTFOLIO = {
         "다음 단계: 위치 피드백이 있는 서보나 엔코더로 바꿔 중간 각도까지 제어",
       ],
       links: [
-        { label: "최종 PC 코드 (Python)", url: "code/robot-hand/v2-arduino-nano/hand_control.py" },
-        { label: "최종 Arduino 코드", url: "code/robot-hand/v2-arduino-nano/finger_servo.ino" },
+        { label: "최종 PC 코드 (Python)", url: "code/robot-hand/v2-arduino-uno/hand_control.py" },
+        { label: "최종 Arduino 코드", url: "code/robot-hand/v2-arduino-uno/finger_servo.ino" },
         { label: "1차 ESP32 버전 코드", url: "code/robot-hand/v1-esp32/hand_angle_esp32.py" },
       ],
     },
@@ -175,7 +175,7 @@ window.PORTFOLIO = {
         "PC 쪽(ESP32.py)은 \"S,엄지,검지,중지,약지,소지\\n\"처럼 다섯 손가락의 서보 값을 한 줄에 묶어 보냈고, 보드 쪽은 R/r, P/p 같은 한 글자 명령만 알아듣도록 짜여 있었습니다. 보드는 모르는 글자를 그냥 무시했습니다.",
       tried: "서보 회전 방향 테스트와 키보드 입력 시리얼 테스트로 하드웨어와 통신 자체를 따로 확인했습니다.",
       observed: "서보와 통신은 각각 정상이었고, 문제는 양쪽이 약속한 메시지 형식이 달랐다는 것이었습니다.",
-      improved: "연속 각도를 보내는 방식을 접고, 접힘/펴짐 상태가 바뀔 때만 한 글자를 보내는 방식으로 PC와 보드를 통일했습니다. 최종 Arduino Nano 버전도 이 방식을 씁니다.",
+      improved: "연속 각도를 보내는 방식을 접고, 접힘/펴짐 상태가 바뀔 때만 한 글자를 보내는 방식으로 PC와 보드를 통일했습니다. 최종 Arduino Uno 버전도 이 방식을 씁니다.",
       learned: "통신 형식은 양쪽 코드보다 먼저 한 곳에 정해 둔다. 보드는 모르는 명령을 조용히 버리지 말고 알려 주게 만든다.",
     },
     {
