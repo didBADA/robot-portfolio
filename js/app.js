@@ -169,11 +169,18 @@
     document.title = `${p.title} — ${D.profile.name} 로보틱스`;
     const list = (arr, cls = "") =>
       arr && arr.length ? `<ul class="${cls}">${arr.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="placeholder">자료 준비 중입니다.</p>`;
+    const table = (t) => `
+      <div class="data-table">${t.title ? `<h3>${esc(t.title)}</h3>` : ""}
+        <div class="table-scroll"><table>
+          <thead><tr>${t.head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead>
+          <tbody>${t.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
+        </table></div>${t.note ? `<p class="table-note">${esc(t.note)}</p>` : ""}
+      </div>`;
     const text = (t) => (t ? `<p>${esc(t)}</p>` : `<p class="placeholder">자료 준비 중입니다.</p>`);
     const sections = [
       ["goal", "프로젝트 목표", text(p.goal)],
       ["problem", "해결하려는 문제", text(p.problem)],
-      ["hardware", "하드웨어 구성", list(p.hardware)],
+      ["hardware", "하드웨어 구성", list(p.hardware) + (p.tables || []).map(table).join("")],
       ["software", "소프트웨어 구조", list(p.software)],
       ["control", "제어 알고리즘", text(p.control)],
       ["process", "개발 과정", p.process?.length ? `<ol class="steps">${p.process.map((x) => `<li>${esc(x)}</li>`).join("")}</ol>` : text("")],

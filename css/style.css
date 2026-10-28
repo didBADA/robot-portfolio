@@ -222,6 +222,15 @@ section.block.alt { background: var(--surface); border-top: 1px solid var(--line
 .gallery a:hover img { transform: scale(1.04); }
 .gallery figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
 .doc-section pre { background: var(--ink); color: #e6edf6; padding: 14px 16px; border-radius: var(--radius-sm); overflow-x: auto; font: 13px/1.6 var(--mono); }
+.data-table { margin-top: 20px; }
+.data-table h3 { font-size: 15px; margin: 0 0 8px; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.data-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table th, .data-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.data-table th { background: var(--bg); font-size: 12px; font-family: var(--mono); color: var(--muted); font-weight: 600; }
+.data-table tbody tr:last-child td { border-bottom: 0; }
+.data-table td:first-child { font-family: var(--mono); color: var(--accent-ink); }
+.table-note { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
 .code-viewer { border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 16px; background: #0d1117; }
 .code-tabs { display: flex; gap: 2px; overflow-x: auto; background: var(--surface); border-bottom: 1px solid var(--line); padding: 6px 6px 0; }
 .code-tab { border: 0; background: none; color: var(--muted); padding: 8px 12px; font: 500 13px var(--font); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
