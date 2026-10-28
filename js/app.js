@@ -186,8 +186,11 @@
       [
         "links",
         "영상 및 코드",
-        p.links?.length
-          ? `<div class="tags">${p.links.map((l) => `<a class="btn btn-ghost btn-sm" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>`
+        p.links?.length || p.code?.length
+          ? (p.code?.length ? codeViewer(p.code) : "") +
+            (p.links?.length
+              ? `<div class="tags">${p.links.map((l) => `<a class="btn btn-ghost btn-sm" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>`
+              : "")
           : `<p class="placeholder">영상과 코드는 정리 후 공개 예정입니다.</p>`,
       ],
     ];
@@ -221,7 +224,71 @@
           .join("")}</article>
       </div>`;
     tocSpy();
+    if (p.code?.length) initCodeViewer(p.code);
   };
+
+  /* ---------- 코드 뷰어 (프로젝트 상세) ---------- */
+  const codeViewer = (files) => `
+    <div class="code-viewer">
+      <div class="code-tabs" role="tablist">${files
+        .map((f, i) => `<button class="code-tab" role="tab" aria-selected="${i === 0}" data-i="${i}">${esc(f.label)}</button>`)
+        .join("")}</div>
+      <div class="code-bar"><span class="code-path mono"></span><button class="code-copy" type="button">복사</button></div>
+      <pre class="code-body"><code></code></pre>
+    </div>`;
+
+  let hljsLoading;
+  const loadHljs = () =>
+    (hljsLoading ||= new Promise((resolve) => {
+      const css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = "https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/github-dark.min.css";
+      document.head.appendChild(css);
+      const js = document.createElement("script");
+      js.src = "https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/highlight.min.js";
+      js.onload = () => resolve(window.hljs);
+      js.onerror = () => resolve(null); // 하이라이트 없이 일반 텍스트로 표시
+      document.head.appendChild(js);
+    }));
+
+  function initCodeViewer(files) {
+    const box = $(".code-viewer");
+    const code = $(".code-body code", box);
+    const cache = {};
+    let current = "";
+    const show = async (i) => {
+      const f = files[i];
+      box.querySelectorAll(".code-tab").forEach((b) => b.setAttribute("aria-selected", b.dataset.i == i));
+      $(".code-path", box).textContent = f.path.split("/").pop();
+      code.className = "";
+      code.textContent = "불러오는 중…";
+      try {
+        cache[f.path] ??= await fetch(f.path).then((r) => (r.ok ? r.text() : Promise.reject(r.status)));
+      } catch {
+        code.textContent = "코드를 불러오지 못했습니다. 아래 GitHub 링크에서 확인해 주세요.";
+        return;
+      }
+      current = cache[f.path];
+      const hljs = await loadHljs();
+      if (files[i] !== f || !hljs) return void (code.textContent = current);
+      const lang = /\.py$/.test(f.path) ? "python" : /\.(ino|cpp|c|h)$/.test(f.path) ? "cpp" : "plaintext";
+      code.innerHTML = hljs.highlight(current, { language: lang }).value;
+    };
+    $(".code-tabs", box).addEventListener("click", (e) => {
+      const b = e.target.closest(".code-tab");
+      if (b) show(+b.dataset.i);
+    });
+    $(".code-copy", box).addEventListener("click", async (e) => {
+      try {
+        await navigator.clipboard.writeText(current);
+        e.target.textContent = "복사됨";
+      } catch {
+        e.target.textContent = "복사 실패";
+      }
+      setTimeout(() => (e.target.textContent = "복사"), 1500);
+    });
+    show(0);
+  }
 
   R.research = () => {
     const ul = (arr, cls = "") => (arr?.length ? `<ul class="${cls}">${arr.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="placeholder">자료 준비 중입니다.</p>`);

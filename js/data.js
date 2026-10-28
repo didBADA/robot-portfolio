@@ -112,11 +112,14 @@ window.PORTFOLIO = {
         "한계: 중간 각도 제어가 어려움 (연속회전 서보) · 위치 피드백이 없어 반복 동작 시 위치 오차 · 배터리·마찰이 바뀌면 시간값 재조정 필요 · 손을 정면으로 보일 때 판정 불안정",
         "다음 단계: 위치 피드백이 있는 서보나 엔코더로 바꿔 중간 각도까지 제어",
       ],
-      links: [
-        { label: "최종 PC 코드 (Python)", url: "code/robot-hand/v2-arduino-uno/hand_control.py" },
-        { label: "최종 Arduino 코드", url: "code/robot-hand/v2-arduino-uno/finger_servo.ino" },
-        { label: "1차 ESP32 버전 코드", url: "code/robot-hand/v1-esp32/hand_angle_esp32.py" },
+      code: [
+        { label: "최종 · PC (Python)", path: "code/robot-hand/v2-arduino-uno/hand_control.py" },
+        { label: "최종 · Arduino", path: "code/robot-hand/v2-arduino-uno/finger_servo.ino" },
+        { label: "1차 · PC (Python)", path: "code/robot-hand/v1-esp32/hand_angle_esp32.py" },
+        { label: "1차 · ESP32", path: "code/robot-hand/v1-esp32/finger_servo_esp32.ino" },
+        { label: "1차 · 서보 방향 테스트", path: "code/robot-hand/v1-esp32/servo_direction_test.ino" },
       ],
+      links: [{ label: "GitHub에서 코드 보기", url: "https://github.com/didBADA/robot-portfolio/tree/main/code/robot-hand" }],
     },
     /* 예시
     {
@@ -140,6 +143,7 @@ window.PORTFOLIO = {
       process: ["1단계", "2단계"],
       lessons: ["시행착오와 개선 1"],
       results: ["실험 결과 1"],
+      code: [{ label: "제어 코드", path: "code/my-robot-arm/main.py" }], // 페이지 안에서 바로 보여 줄 코드 파일
       links: [{ label: "GitHub", url: "https://github.com/..." }, { label: "영상", url: "https://youtube.com/..." }],
     },
     */
