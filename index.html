@@ -34,15 +34,15 @@
         <div><strong id="stat-logs">0</strong>개발 기록</div>
       </div>
     </div>
-    <div class="lab-card reveal" aria-label="인터랙티브 로봇팔 시뮬레이션">
-      <div class="lab-card-head"><span class="lights"><i></i><i></i><i></i></span><span>레일 검사 시뮬레이션 — 표면 법선 서보잉</span><span id="ro-mode">자동 순찰</span></div>
-      <span class="lab-hint">마우스를 레일 위로 움직여 보세요</span>
-      <canvas id="arm-canvas" role="img" aria-label="4족보행 로봇 위의 로봇팔이 레일 단면의 검사 지점을 카메라로 바라보는 애니메이션"></canvas>
+    <div class="lab-card reveal" aria-label="인터랙티브 휴머노이드 시뮬레이션">
+      <div class="lab-card-head"><span class="lights"><i></i><i></i><i></i></span><span>16관절 휴머노이드 — 서보 제어 시뮬레이션</span><span id="ro-mode">자동 동작</span></div>
+      <span class="lab-hint">마우스를 움직여 보세요 — 눈과 팔이 따라옵니다</span>
+      <canvas id="arm-canvas" role="img" aria-label="직접 만든 16관절 휴머노이드가 인사하고 제자리 걸음과 균형 잡기를 하며, 마우스를 따라 팔을 뻗는 애니메이션"></canvas>
       <div class="lab-readout">
-        <div>목표 지점<b id="ro-point">—</b></div>
-        <div>관절 각도<b id="ro-q">—</b></div>
-        <div>관절 오차<b id="ro-err">—</b></div>
-        <div>카메라 화각<b>87°</b></div>
+        <div>동작<b id="ro-point">—</b></div>
+        <div>서보 ch0·1·2<b id="ro-q">—</b></div>
+        <div>몸 기울기 (IMU)<b id="ro-err">—</b></div>
+        <div>움직이는 서보<b id="ro-moving">—</b></div>
       </div>
     </div>
   </div>
@@ -82,7 +82,7 @@
 <script src="js/data.js"></script>
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
-<script src="js/robot-arm.js"></script>
+<script src="js/humanoid.js"></script>
 <script src="js/agent.js"></script>
 </body>
 </html>

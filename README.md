@@ -16,7 +16,7 @@ robot-portfolio/
 ├─ js/config.js        AI 에이전트 연결 설정
 ├─ js/app.js           페이지 렌더링
 ├─ js/agent.js         AI 에이전트 패널 (데모 모드 / 연결 모드)
-├─ js/robot-arm.js     히어로 로봇팔 애니메이션
+├─ js/humanoid.js      히어로 휴머노이드 애니메이션
 └─ api/chat.js         실제 AI 연결용 서버 함수 (Vercel)
 ```
 
