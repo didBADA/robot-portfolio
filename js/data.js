@@ -237,7 +237,7 @@ window.PORTFOLIO = {
         "트랙을 직접 몰아 모은 사진 19,397장으로 NVIDIA CNN 조향 모델을 학습시키고, 배치·학습률·에폭을 하나씩 바꿔 loss를 비교했습니다. 혼동 행렬로 '직진'을 못 맞히는 원인까지 찾았고, OpenCV 라인 추종에는 라인 이탈 감지·자동 복구 기능을 직접 넣어 실차로 확인했습니다.",
       category: "딥러닝 · 자율주행",
       tags: ["Python", "TensorFlow / Keras", "TFLite", "NVIDIA CNN", "Google Colab", "OpenCV", "Raspberry Pi 4B", "gpiozero"],
-      status: "experiment",
+      status: "done",
       evidence: "real",
       period: "2026.09 – 2026.12",
       illustration: "line",
