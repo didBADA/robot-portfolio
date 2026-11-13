@@ -239,7 +239,7 @@ window.PORTFOLIO = {
       tags: ["Python", "TensorFlow / Keras", "TFLite", "NVIDIA CNN", "Google Colab", "OpenCV", "Raspberry Pi 4B", "gpiozero"],
       status: "experiment",
       evidence: "real",
-      period: "2026 2학기 (수업)",
+      period: "2026.09 – 2026.12",
       illustration: "line",
       image: "assets/img/ai-car/curve.jpg",
       gallery: [
