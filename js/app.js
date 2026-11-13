@@ -273,7 +273,8 @@
       code.className = "";
       code.textContent = "불러오는 중…";
       try {
-        cache[f.path] ??= await fetch(f.path).then((r) => (r.ok ? r.text() : Promise.reject(r.status)));
+        // 코드는 js/code-data.js에 미리 들어 있음 (file://로 열어도 보이도록). 없을 때만 파일을 읽어 옴
+        cache[f.path] ??= window.PORTFOLIO_CODE?.[f.path] ?? (await fetch(f.path).then((r) => (r.ok ? r.text() : Promise.reject(r.status))));
       } catch {
         code.textContent = "코드를 불러오지 못했습니다. 아래 GitHub 링크에서 확인해 주세요.";
         return;

@@ -90,3 +90,8 @@ AI 연결이 필요 없다면 **GitHub Pages**도 됩니다: 저장소 Settings 
 Anthropic 콘솔에서 월 사용 한도를 걸어 두는 것을 권장합니다.
 
 > 로컬(더블클릭)로 열었을 때는 서버가 없으므로 항상 데모 모드로 동작합니다.
+
+## 코드 뷰어
+
+프로젝트 페이지의 코드는 `js/code-data.js`에 미리 들어 있습니다(바탕화면 바로가기로 열 때도 보이도록).
+`code/` 파일이나 `js/data.js`의 code 목록을 바꾸면 `node tools/build-code.mjs`를 실행해 다시 만들어 주세요.
