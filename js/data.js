@@ -25,7 +25,8 @@ window.PORTFOLIO = {
     using: [
       { group: "프로그래밍", items: ["Python", "Arduino (C/C++)"] },
       { group: "비전", items: ["OpenCV", "MediaPipe Hands"] },
-      { group: "하드웨어", items: ["Arduino Uno", "ESP32", "연속회전 서보", "시리얼 통신"] },
+      { group: "딥러닝", items: ["TensorFlow / Keras", "TFLite", "Google Colab", "CNN 회귀 모델"] },
+      { group: "하드웨어", items: ["Arduino Uno", "ESP32", "Raspberry Pi 4B", "DC 모터 드라이버(TB6612FNG)", "연속회전 서보", "시리얼 통신"] },
       { group: "설계 · 제작", items: ["FreeCAD", "3D 프린팅"] },
       /* 예시
       { group: "프로그래밍", items: ["Python", "C++"] },
@@ -227,6 +228,112 @@ window.PORTFOLIO = {
       code: [{ label: "서보 채널 테스트 (ESP32)", path: "code/humanoid/servo_test.ino" }],
       links: [{ label: "GitHub에서 코드 보기", url: "https://github.com/didBADA/robot-portfolio/tree/main/code/humanoid" }],
     },
+    {
+      id: "ai-car",
+      featured: true,
+      title: "딥러닝 자율주행 자동차",
+      subtitle: "카메라 한 장으로 조향 각도를 예측하는 CNN을 학습시키고, 하이퍼파라미터와 오차를 분석한 라즈베리파이 자율주행차 (무인이동체실습 수업)",
+      summary:
+        "트랙을 직접 몰아 모은 사진 19,397장으로 NVIDIA CNN 조향 모델을 학습시키고, 배치·학습률·에폭을 하나씩 바꿔 loss를 비교했습니다. 혼동 행렬로 '직진'을 못 맞히는 원인까지 찾았고, OpenCV 라인 추종에는 라인 이탈 감지·자동 복구 기능을 직접 넣어 실차로 확인했습니다.",
+      category: "딥러닝 · 자율주행",
+      tags: ["Python", "TensorFlow / Keras", "TFLite", "NVIDIA CNN", "Google Colab", "OpenCV", "Raspberry Pi 4B", "gpiozero"],
+      status: "experiment",
+      evidence: "real",
+      period: "2026 2학기 (수업)",
+      illustration: "line",
+      image: "assets/img/ai-car/curve.jpg",
+      gallery: [
+        { src: "assets/img/ai-car/curve.jpg", caption: "트랙의 곡선 구간을 주행하는 차량" },
+        { video: "assets/video/ai-car/curve.mp4", poster: "assets/img/ai-car/curve.jpg", caption: "곡선 주행 시연 영상" },
+        { video: "assets/video/ai-car/recovery.mp4", poster: "assets/img/ai-car/track.jpg", caption: "라인 이탈 → 회전 탐색 → 복귀 시연 영상" },
+        { src: "assets/img/ai-car/camera-view.png", caption: "차량 카메라가 보는 트랙 화면" },
+        { src: "assets/img/ai-car/mask.png", caption: "이진화 결과 — 흰 라인만 남김" },
+        { video: "assets/video/ai-car/switch-ramp.mp4", poster: "assets/img/ai-car/car-top.jpg", caption: "스위치 가속·감속 제어 시연 영상" },
+        { src: "assets/img/ai-car/batch.png", caption: "Batch 크기별 loss 비교 (32·64·100·128)", wide: true },
+        { src: "assets/img/ai-car/lr.png", caption: "Learning rate별 loss 비교 (1e-2·1e-3·1e-4, 로그 스케일)", wide: true },
+        { src: "assets/img/ai-car/epoch.png", caption: "Epoch 50까지 학습 — 약 20 epoch부터 과적합", wide: true },
+        { src: "assets/img/ai-car/confusion.png", caption: "기준 모델 혼동 행렬 (left · go · right)", wide: true },
+      ],
+      goal:
+        "사람이 운전한 기록을 보고 배우는 딥러닝 모델로 차가 스스로 라인을 따라가게 하고, 그 모델이 왜 잘 되고 왜 틀리는지를 실험으로 설명하는 것.",
+      problem:
+        "카메라 사진 한 장만 보고 핸들을 얼마나 꺾을지(조향 각도)를 맞혀야 합니다. 같은 모델이라도 batch 크기·학습률·학습 횟수에 따라 결과가 크게 달라지고, loss 숫자만 봐서는 실제 주행에서 어떤 실수를 하는지 알 수 없습니다. 또 라인을 놓쳤을 때 차가 어떻게 행동할지도 정해 줘야 합니다.",
+      hardware: [
+        "Raspberry Pi 4B — 영상 처리, 모델 추론, 주행 판단",
+        "Pi 카메라 — 차량 앞쪽에서 바닥 라인 촬영 (주행 시 320×240)",
+        "TB6612FNG 듀얼 H-브리지 모터 드라이버 — A: 왼쪽, B: 오른쪽",
+        "DC 기어모터 × 4 — 좌우 2개씩 묶어 2채널로 구동",
+        "18650 배터리 × 2 — 차량 전체 전원",
+        "푸시 스위치 × 4 — 가속·감속 제어 과제의 전진·우회전·좌회전·후진 입력",
+      ],
+      tables: [
+        {
+          title: "GPIO 연결 (BCM)",
+          head: ["장치", "PWM", "IN1", "IN2", "역할"],
+          rows: [
+            ["모터 A", "18", "22", "27", "왼쪽 바퀴"],
+            ["모터 B", "23", "25", "24", "오른쪽 바퀴"],
+            ["SW1 ~ SW4", "", "", "", "GPIO 5 · 6 · 13 · 19 (전진 · 우회전 · 좌회전 · 후진)"],
+          ],
+        },
+        {
+          title: "하이퍼파라미터 실험 결과 (최종 loss, MSE)",
+          head: ["바꾼 값", "설정", "train", "validation", "해석"],
+          rows: [
+            ["Batch", "32", "434.9", "395.1", "9 epoch에서 loss 약 3,100 급등 — 불안정"],
+            ["Batch", "64", "371.1", "344.1", ""],
+            ["Batch", "100 (기준)", "355.0", "331.9", ""],
+            ["Batch", "128", "343.7", "324.4", "가장 낮고 안정적"],
+            ["Learning rate", "1e-2", "981.4", "959.2", "평균값만 내놓는 상태에서 멈춤 = 학습 실패"],
+            ["Learning rate", "1e-3 (기준)", "355.0", "331.9", "가장 적합"],
+            ["Learning rate", "1e-4", "404.9", "373.9", "방향은 맞지만 10 epoch로는 느림"],
+            ["Epoch", "20", "236.4", "279.3", "이때부터 validation이 더 안 내려감"],
+            ["Epoch", "50", "78.6", "261.5", "validation이 train의 3.3배 = 과적합"],
+          ],
+          note: "기준 세팅 Batch 100 · Learning rate 1e-3 · Epoch 10. 한 번에 한 값만 바꾸고 나머지는 고정했습니다. validation 최저점은 35 epoch (257.9).",
+        },
+      ],
+      software: [
+        "데이터 수집: 라즈베리파이에서 키보드로 차를 직접 몰며 카메라 사진과 그때의 조향 각도를 함께 저장 → train_v3 19,397장",
+        "학습 (Google Colab): NVIDIA 자율주행 CNN 구조로 사진 → 조향 각도를 예측하는 회귀 모델, loss는 MSE. 학습 15,517장 / 검증 3,880장 (8:2)",
+        "변환: 학습된 Keras 모델(.h5)을 라즈베리파이에서 가볍게 돌릴 수 있도록 TFLite(.tflite)로 변환",
+        "주행 판단: 예측 각도가 85° 미만이면 왼쪽, 85~95°면 직진, 95° 초과면 오른쪽",
+        "OpenCV 라인 추종: 화면 아래 절반 → 흑백 + 가우시안 블러 → 임계값 130 이진화 → 침식·팽창 → 가장 큰 윤곽선의 무게중심 cx로 방향 결정",
+        "모터 제어: gpiozero로 PWM 듀티(0~1)와 방향 핀을 설정, 회전은 한쪽 바퀴를 멈춰서 함",
+      ],
+      control:
+        "OpenCV 라인 추종은 화면 폭 320px의 중앙 160을 기준으로 cx ≤ 130이면 왼쪽, cx ≥ 190이면 오른쪽, 그 사이면 직진합니다. 라인을 놓치면(쓸 만한 윤곽선이 없으면) 시간을 재며 3단계로 복구합니다: ① 0.25초까지는 직전 방향 그대로 주행 → ② 3초까지는 직전 방향으로 천천히(속도 0.4) 회전하며 탐색 → ③ 그래도 못 찾으면 정지. 직전 상태가 직진이었다면 어느 쪽으로 돌지 알 수 없으므로, 마지막으로 꺾었던 방향(last_turn)을 따로 기억해 그쪽으로 탐색합니다. 가속·감속 과제에서는 0.1초마다 PWM 듀티를 1/30씩 올리고 내려 3초 선형 가속·3초 선형 감속을 만들었습니다.",
+      process: [
+        "카메라 연결과 OpenCV 영상 처리(자르기 · 흑백 · 블러 · 이진화 · 윤곽선) 단계별 실습",
+        "스위치 입력으로 3초 선형 가속·감속하는 모터 제어 구현 (9주차 과제)",
+        "OpenCV 라인 추종에 라인 이탈 감지와 3단계 자동 복구 추가, 곡선 코스에서 시연",
+        "트랙을 직접 몰아 학습 데이터 19,397장 수집",
+        "Colab에서 NVIDIA CNN 학습 → TFLite 변환",
+        "하이퍼파라미터 실험 (batch 4가지 · learning rate 3가지 · epoch 최대 50) 과 혼동 행렬 분석 (10주차 과제)",
+      ],
+      lessons: [
+        "라인을 놓친 뒤 2초가 지나면 후진하던 첫 버전 → 요구사항대로 '직전 방향으로 회전 탐색 + 3초 후 정지'로 바꾸고, 직진 중 이탈할 때를 위해 last_turn을 추가 (개발 기록 참고)",
+        "가속 과제에서 처음엔 STEP = 0.02로 둬서 50번(약 5초) 걸림 → STEP = 0.1초 ÷ 3초로 계산해 요구사항 3초를 맞춤",
+        "카메라가 인식되지 않음 → 설정 변경·케이블 재연결로 안 돼서 하드웨어 결함으로 판단, 부품 교체로 해결",
+        "loss가 낮아도 직진을 잘 못 맞힘 → 혼동 행렬로 원인을 찾음 (개발 기록 참고)",
+      ],
+      results: [
+        "OpenCV 라인 추종: 급커브가 있는 곡선 코스 주행 성공, 라인이 없는 곳에서 출발 → 제자리 회전으로 라인 탐색 → 재검출 후 정상 주행 복귀 성공 (시연 영상)",
+        "Batch: 클수록 loss가 낮고 안정적 (128이 validation 324.4로 가장 낮음). 단 이번 실험은 epoch당 스텝 수가 고정이라 큰 batch가 사진을 더 많이 본 효과도 섞여 있음",
+        "Learning rate: 1e-3이 가장 적합. 1e-2는 약 960에서 멈춤 — 사진을 안 보고 평균 각도만 내놓을 때의 loss와 같아 학습 실패로 판단",
+        "Epoch: 약 20부터 과적합 시작, validation 최저점은 35 epoch",
+        "혼동 행렬 (기준 모델): 왼쪽 97.3% · 오른쪽 94.4%는 잘 맞히지만 직진은 24.7% — 전체 정확도 58.2%. 직진 2,057장 중 1,549장을 회전으로 판단",
+        "원인: 직진으로 인정되는 범위(±5°)가 모델 평균 오차(약 19°)보다 좁음",
+        "제안 설정: Batch 128 · Learning rate 1e-3 · Epoch 20~35 (세 값을 함께 쓴 조합은 아직 실험하지 않음)",
+        "참고: 혼동 행렬은 세션 재시작 후 데이터를 다시 나눠, 검증 데이터가 학습 때와 일부 다를 수 있음",
+      ],
+      code: [
+        { label: "라인 이탈 감지 · 복구 (최종)", path: "code/ai-car/line_recovery.py" },
+        { label: "기본 라인 추종 (강의 코드)", path: "code/ai-car/5_3_7.py" },
+        { label: "카메라 클래스", path: "code/ai-car/mycamera.py" },
+      ],
+      links: [{ label: "GitHub에서 코드 보기", url: "https://github.com/didBADA/robot-portfolio/tree/main/code/ai-car" }],
+    },
     /* 예시
     {
       id: "my-robot-arm",                 // 영문·숫자·하이픈만, 다른 항목과 겹치면 안 됨
@@ -299,6 +406,34 @@ window.PORTFOLIO = {
       observed: "손가락마다 구조와 회전 방향이 달라 같은 값으로는 다섯 손가락의 동작을 맞출 수 없었습니다.",
       improved: "손가락마다 감기 값(100~160), 풀기 값(40~55), 감는 시간·푸는 시간(1.0~2.5초)을 따로 정했습니다. 카메라 쪽 접힘 판정 기준도 손가락별로 다시 맞췄습니다.",
       learned: "개루프 제어는 손가락마다 보정이 필요하고, 배터리나 마찰이 바뀌면 다시 맞춰야 한다. 다음 버전에서는 위치 피드백을 넣는다.",
+    },
+    {
+      id: "ai-car-line-recovery",
+      date: "자율주행차 · 라인 복구",
+      title: "직진하다 라인을 놓치면 어느 쪽으로 돌아야 할까",
+      tags: ["자율주행차", "OpenCV", "복구 알고리즘"],
+      problem: "라인을 놓친 차가 직전 방향을 잠깐 유지한 뒤, 그 방향으로 회전하며 라인을 다시 찾아야 했습니다.",
+      cause:
+        "첫 버전은 0.25초 동안 직전 방향을 유지한 뒤 별도의 탐색 동작이 없었고, 2초가 지나면 속도 0.1로 시간 제한 없이 후진했습니다. 특히 직전 상태가 '직진'이면 회전할 방향 정보가 없어 그냥 직진만 했습니다.",
+      tried: "코드를 한 줄씩 다시 읽으며 라인을 놓친 뒤 시간대별로 차가 실제로 무엇을 하는지 표로 정리했습니다.",
+      observed: "요구사항의 '회전 탐색'은 왼쪽·오른쪽으로 꺾던 중일 때만 우연히 맞았고, 후진은 요구사항에 없는 동작이었습니다. 횟수를 세던 count=+1도 누적이 아니라 1을 넣는 코드여서 아무 역할을 못 했습니다.",
+      improved:
+        "복구를 ① 0.25초 직전 방향 유지 → ② 3초까지 직전 방향으로 저속 회전 탐색 → ③ 3초 후 정지의 3단계로 다시 짰습니다. 마지막으로 꺾었던 방향을 last_turn에 따로 저장해, 직진 중에 놓쳐도 그쪽으로 탐색하게 했습니다. 라인이 없는 곳에서 출발해 회전 탐색 후 복귀하는 것을 실차로 확인했습니다.",
+      learned: "'놓쳤을 때'의 동작은 시간 구간마다 명확히 나눠 적어야 한다. 끝없이 도는 동작에는 반드시 시간 제한과 정지 조건을 둔다.",
+    },
+    {
+      id: "ai-car-confusion-matrix",
+      date: "자율주행차 · 모델 분석",
+      title: "loss는 내려가는데 직진을 못 맞히던 이유",
+      tags: ["자율주행차", "딥러닝", "모델 분석"],
+      problem: "NVIDIA CNN 조향 모델의 loss는 잘 내려갔지만, 이 숫자만으로는 주행에서 어떤 실수를 하는지 알 수 없었습니다.",
+      cause:
+        "모델은 각도를 숫자로 예측하는데, 주행 코드는 85~95°만 직진으로 봅니다. 직진 구간 폭은 ±5°인데 모델의 평균 오차는 약 19°라서, 조금만 틀려도 직진이 회전으로 바뀝니다.",
+      tried: "예측 각도를 주행 코드와 같은 기준(85 미만 left / 85~95 go / 95 초과 right)으로 나눠 혼동 행렬을 그렸습니다.",
+      observed: "왼쪽 97.3%, 오른쪽 94.4%는 잘 맞혔지만 직진은 24.7%뿐이었고, 직진 사진 2,057장 중 1,549장을 회전으로 판단했습니다. 전체 정확도는 58.2%였습니다.",
+      improved:
+        "하이퍼파라미터 실험으로 오차 자체를 줄일 설정(Batch 128 · 학습률 1e-3 · Epoch 20~35)을 찾았습니다. 직진 판정 범위와 모델 오차의 균형은 다음 실험 과제로 남겼습니다.",
+      learned: "회귀 모델의 평가는 loss 하나로 끝내지 말고, 실제로 쓰는 판단 기준으로 바꿔서 어디서 틀리는지 봐야 한다.",
     },
     /* 예시
     {

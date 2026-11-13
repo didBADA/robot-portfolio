@@ -218,7 +218,10 @@
           p.gallery?.length
             ? `<div class="gallery reveal">${p.gallery
                 .map(
-                  (g) => `<figure><a href="${esc(g.src)}" target="_blank" rel="noopener"><img src="${esc(g.src)}" alt="${esc(g.caption)}" loading="lazy"></a><figcaption>${esc(g.caption)}</figcaption></figure>`
+                  (g) =>
+                    g.video
+                      ? `<figure><div class="gallery-video"><video src="${esc(g.video)}"${g.poster ? ` poster="${esc(g.poster)}"` : ""} controls muted playsinline preload="metadata"></video></div><figcaption>▶ ${esc(g.caption)}</figcaption></figure>`
+                      : `<figure${g.wide ? ` class="wide"` : ""}><a href="${esc(g.src)}" target="_blank" rel="noopener"><img src="${esc(g.src)}" alt="${esc(g.caption)}" loading="lazy"></a><figcaption>${esc(g.caption)}</figcaption></figure>`
                 )
                 .join("")}</div>`
             : ""
